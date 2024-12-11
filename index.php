@@ -153,7 +153,7 @@ if (isset($_GET['error'])) {
                 } else {
                     echo "ERROR: Could not execute $sql2. <br>" . mysqli_error($link);
                 }
-                
+
                 // Additional Statistics: Number of Routes by Difficulty Across All Gyms
                 $sql3 = "SELECT Difficulty, COUNT(*) AS RouteCount
                          FROM Route
@@ -186,10 +186,9 @@ if (isset($_GET['error'])) {
                 } else {
                     echo "ERROR: Could not execute $sql3. <br>" . mysqli_error($link);
                 }
-                
+
                 // Close connection
                 mysqli_close($link);
-                
                 ?>
     </article>
 </body>
