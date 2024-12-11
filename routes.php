@@ -134,9 +134,6 @@
                 } elseif ($selectedgym!='' && $selectedsetter=='') {
                     # Only Gym
                     echo "<h2>Routes from Gym ". $selectedgym ."</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Route" />';
-                    echo '</form>';
                     $sql = "SELECT Route.RouteID,Setter.Name,Created,Difficulty,Color, OffColor, GymID, COALESCE(SUM(RouteHold.Amount),0) AS Total
                             FROM Route
                             NATURAL JOIN RouteHold
@@ -199,9 +196,6 @@
                 } elseif ($selectedgym=='' && $selectedsetter!='') {
                     # Only Setter
                     echo "<h2>Routes from Setter ". $selectedsetter ."</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Route" />';
-                    echo '</form>';
                     $sql = "SELECT Route.RouteID,Setter.Name,Created,Difficulty,Color, OffColor, GymID, COALESCE(SUM(RouteHold.Amount),0) AS Total
                             FROM Route
                             NATURAL JOIN RouteHold
@@ -264,9 +258,6 @@
                 } else {
                     # Gym and Setter
                     echo "<h2>Routes from Gym ". $selectedgym ." and Setter ". $selectedsetter ."</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Route" />';
-                    echo '</form>';
                     $sql = "SELECT Route.RouteID,Setter.Name,Created,Difficulty,Color, OffColor, GymID, COALESCE(SUM(RouteHold.Amount),0) AS Total
                             FROM Route
                             NATURAL JOIN RouteHold

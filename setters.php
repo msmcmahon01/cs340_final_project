@@ -115,9 +115,6 @@
                     mysqli_close($link);
                 } else {
                     echo "<h2>Setters from Gym ". $selectedgym ."</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Setter" />';
-                    echo '</form>';
                     $sql = "SELECT Setter.SetterID,Name,DOB,Total
                             FROM Setter
                             LEFT JOIN(
