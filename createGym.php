@@ -1,11 +1,11 @@
 <?php
 // Include config file
 require_once "config.php";
- 
+
 // Define variables and initialize with empty values
 $Ssn = $Lname = $Fname = $Salary = $Bdate = $Bdate1 = $Address = $Sex = $Dno = $Super_ssn = "";
 $Ssn_err = $Lname_err = $Fname_err = $Address_err = $Sex_err = $Salary_err = $Dno_err =$Bdate_err= "" ;
- 
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate First name
@@ -14,61 +14,61 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Fname_err = "Please enter a Fname.";
     } elseif(!filter_var($Fname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $Fname_err = "Please enter a valid Fname.";
-    } 
+    }
     // Validate Last name
     $Lname = trim($_POST["Lname"]);
     if(empty($Lname)){
         $Lname_err = "Please enter a Lname.";
     } elseif(!filter_var($Lname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $Lname_err = "Please enter a valid Lname.";
-    } 
- 
+    }
+
     // Validate SSN
     $Ssn = trim($_POST["Ssn"]);
     if(empty($Ssn)){
-        $Ssn_err = "Please enter SSN.";     
+        $Ssn_err = "Please enter SSN.";
     } elseif(!ctype_digit($Ssn)){
         $Ssn_err = "Please enter a positive integer value of SSN.";
-    } 
+    }
     // Validate Salary
     $Salary = trim($_POST["Salary"]);
     if(empty($Salary)){
-        $Salary_err = "Please enter Salary.";     
+        $Salary_err = "Please enter Salary.";
     }
 	// Validate Address
     $Address = trim($_POST["Address"]);
     if(empty($Address)){
-        $Address_err = "Please enter Address.";     
+        $Address_err = "Please enter Address.";
     }
 	// Validate Sex
     $Sex = trim($_POST["Sex"]);
     if(empty($Sex)){
-        $Sex_err = "Please enter Sex.";     
+        $Sex_err = "Please enter Sex.";
     }
 	// Validate Birthdate
     $Bdate = trim($_POST["Bdate"]);
 
     if(empty($Bdate)){
-        $Bdate_err = "Please enter birthdate.";     
-    }	
+        $Bdate_err = "Please enter birthdate.";
+    }
 
 	// Validate Department
     $Dno = trim($_POST["Dno"]);
     if(empty($Dno)){
-        $Dno_err = "Please enter a department number.";     		
+        $Dno_err = "Please enter a department number.";
 	}
     // Check input errors before inserting in database
-    if(empty($Ssn_err) && empty($Lname_err) && empty($Salary_err) 
+    if(empty($Ssn_err) && empty($Lname_err) && empty($Salary_err)
 				&& empty($Dno_err)&& empty($Address_err) && empty($Sex_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO EMPLOYEE (Ssn, Fname, Lname, Address, Salary, Sex, Bdate, Dno) 
+        $sql = "INSERT INTO EMPLOYEE (Ssn, Fname, Lname, Address, Salary, Sex, Bdate, Dno)
 		        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-         
+
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "isssdssi", $param_Ssn, $param_Fname, $param_Lname, 
+            mysqli_stmt_bind_param($stmt, "isssdssi", $param_Ssn, $param_Fname, $param_Lname,
 				$param_Address, $param_Salary, $param_Sex, $param_Bdate, $param_Dno);
-            
+
             // Set parameters
 			$param_Ssn = $Ssn;
             $param_Lname = $Lname;
@@ -78,7 +78,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			$param_Bdate = $Bdate;
             $param_Salary = $Salary;
             $param_Dno = $Dno;
-            
+
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Records created successfully. Redirect to landing page
@@ -89,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				$Ssn_err = "Enter a unique Ssn.";
             }
         }
-         
+
         // Close statement
         mysqli_stmt_close($stmt);
     }
@@ -98,7 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,7 +127,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="text" name="Ssn" class="form-control" value="<?php echo $Ssn; ?>">
                             <span class="help-block"><?php echo $Ssn_err;?></span>
                         </div>
-                 
+
 						<div class="form-group <?php echo (!empty($Fname_err)) ? 'has-error' : ''; ?>">
                             <label>First Name</label>
                             <input type="text" name="Fname" class="form-control" value="<?php echo $Fname; ?>">
@@ -153,7 +153,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="text" name="Sex" class="form-control" value="<?php echo $Sex; ?>">
                             <span class="help-block"><?php echo $Sex_err;?></span>
                         </div>
-						                  
 						<div class="form-group <?php echo (!empty($Bdate_err)) ? 'has-error' : ''; ?>">
                             <label>Birth date</label>
                             <input type="date" name="Bdate" class="form-control" value="<?php echo date('Y-m-d'); ?>">
@@ -168,7 +167,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a href="index.php" class="btn btn-default">Cancel</a>
                     </form>
                 </div>
-            </div>        
+            </div>
         </div>
     </div>
 </body>
