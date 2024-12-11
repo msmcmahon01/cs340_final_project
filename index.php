@@ -59,7 +59,7 @@ if (isset($_GET['error'])) {
         <div class="container-fluid">
 		    <div>
 		        <h2>Gyms</h2>
-                <form action="createEmployee.php">
+                <form action="createGym.php">
                     <input type="submit" value="+ Add Gym" />
                 </form>
             </div>
