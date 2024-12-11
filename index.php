@@ -78,7 +78,7 @@
                                     echo "<th width=10%>State</th>";
                                     echo "<th width=10%>City</th>";
                                     echo "<th width=20%>Zip</th>";
-                                    echo "<th width=20%>View</th>";
+                                    echo "<th width=20%>Views</th>";
                                 echo "</tr>";
                             echo "</thead>";
                             echo "<tbody>";
