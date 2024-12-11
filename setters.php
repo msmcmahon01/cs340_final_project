@@ -66,9 +66,6 @@
                 }
                 if ($selectedgym == ""){
                     echo "<h2>Setters</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Setter" />';
-                    echo '</form>';
                     $sql = "SELECT Setter.SetterID,Name,DOB,COUNT(GymSetter.GymID) AS Total
                             FROM Setter
                             LEFT JOIN GymSetter ON Setter.SetterID=GymSetter.SetterID
