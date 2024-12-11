@@ -1,4 +1,12 @@
 <?php
+if (isset($_GET['message'])) {
+    echo "<p class='success'>" . htmlspecialchars($_GET['message']) . "</p>";
+}
+if (isset($_GET['error'])) {
+    echo "<p class='error'>" . htmlspecialchars($_GET['error']) . "</p>";
+}
+?>
+<?php
 	session_start();
 	//$currentpage="View Employees"; 
 ?>
@@ -93,6 +101,11 @@
                                     echo '<a href="routes.php?GymID='.$row["GymID"].'"><button>Routes</button></a><br>';
                                     echo '<a href="setters.php?GymID='.$row["GymID"].'"><button class="contrast">Setters</button></a>';
                                     echo "</td>";
+				    echo '<td>';
+                                    echo '<a href="deleteGym.php?GymID='.$row["GymID"].'" onclick="return confirm(\'Are you sure you want to delete this gym and its routes?\');">';
+                                    echo '<button>Delete</button>';
+                                    echo '</a>';
+                                    echo '</td>';       
                                 echo "</tr>";
                             }
                             echo "</tbody>";                            
