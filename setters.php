@@ -66,12 +66,9 @@
                 }
                 if ($selectedgym == ""){
                     echo "<h2>Setters</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Setter" />';
-                    echo '</form>';
-                    $sql = "SELECT SetterID,Name,DOB,COUNT(GymSetter.GymID) AS Total
+                    $sql = "SELECT Setter.SetterID,Name,DOB,COUNT(GymSetter.GymID) AS Total
                             FROM Setter
-                            NATURAL JOIN GymSetter
+                            LEFT JOIN GymSetter ON Setter.SetterID=GymSetter.SetterID
                             GROUP BY Setter.SetterID;";
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
@@ -94,6 +91,7 @@
                                         echo "<td>" . $row['Total'] . "</td>";
                                         echo "<td>";
                                         echo '<a href="routes.php?SetterID='.$row["SetterID"].'"><button>Routes</button></a><br>';
+                                        echo '<a href="updateSetter.php?SetterID='.$row["SetterID"].'"><button>Modify</button></a><br>';
                                         echo "</td>";                                    
                                         //echo "<td>";
                                         //    echo "<a href='viewProjects.php?Ssn=". $row['Ssn']."&Lname=".$row['Lname']."' title='View Projects' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
@@ -122,10 +120,10 @@
                     echo '</form>';
                     $sql = "SELECT Setter.SetterID,Name,DOB,Total
                             FROM Setter
-                            INNER JOIN(
+                            LEFT JOIN(
                                 SELECT Setter.SetterID, GymSetter.GymID, COUNT(GymSetter.GymID) AS Total
                                 FROM Setter
-                                INNER JOIN GymSetter ON Setter.SetterID=GymSetter.SetterID
+                                LEFT JOIN GymSetter ON Setter.SetterID=GymSetter.SetterID
                                 GROUP BY Setter.SetterID
                             ) AS s ON s.SetterID = Setter.SetterID
                             WHERE GymID=$selectedgym;";
@@ -152,6 +150,7 @@
                                         echo "<td>";
                                         echo '<a href="routes.php?SetterID='.$row["SetterID"].'"><button>Routes</button></a><br>';
                                         echo '<a href="routes.php?GymID='.$selectedgym.'&SetterID='.$row["SetterID"].'"><button class="contrast">Routes + Gym</button></a>';
+                                        echo '<a href="updateSetter.php?SetterID='.$row["SetterID"].'"><button>Modify</button></a><br>';    
                                         echo "</td>";                                    
                                         //echo "<td>";
                                         //    echo "<a href='viewProjects.php?Ssn=". $row['Ssn']."&Lname=".$row['Lname']."' title='View Projects' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
