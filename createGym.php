@@ -77,16 +77,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Gym</title>
+    <title>Create Gym</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="pico.slate.css">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"> -->
-	<style type="text/css">
+    <style type="text/css">
         .wrapper{
-            width: 70%;
-            margin:0 auto;
-        }
-        table tr td:last-child a{
-            margin-right: 15px;
+            width: 500px;
+            margin: 0 auto;
         }
     </style>
 </head>
