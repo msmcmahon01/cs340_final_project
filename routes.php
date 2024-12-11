@@ -58,6 +58,41 @@
                 // Include config file
                 //error_reporting(E_ALL);
                 //ini_set('display_errors', '1');
+
+                if (isset($_POST['deleteRoutes'])) {
+                    $deleteDate = $_POST['deleteDate'];
+                    $deleteGym = $_POST['deleteGym'];
+                
+                    // Debugging: Print out the values being passed
+                    echo "<p>Deleting routes on date: $deleteDate for Gym ID: $deleteGym</p>";
+                
+                    // Check for matching records before deletion
+                    $checkSql = "SELECT RouteID FROM Route WHERE Created = '$deleteDate' AND GymID = $deleteGym;";
+                    if ($checkResult = mysqli_query($link, $checkSql)) {
+                        if (mysqli_num_rows($checkResult) > 0) {
+                            echo "<p>Routes found for deletion:</p>";
+                            while ($row = mysqli_fetch_array($checkResult)) {
+                                echo "<p>Route ID: " . $row['RouteID'] . "</p>";
+                            }
+                
+                            // Call the stored procedure to delete routes
+                            $sql = "CALL DeleteRoutesByDate('$deleteDate', $deleteGym);";
+                
+                            if (mysqli_query($link, $sql)) {
+                                echo "<p>Routes created on $deleteDate at Gym $deleteGym have been deleted.</p>";
+                            } else {
+                                echo "ERROR: Could not execute $sql. " . mysqli_error($link);
+                            }
+                        } else {
+                            echo "<p>No routes found for the specified date and gym.</p>";
+                        }
+                        mysqli_free_result($checkResult);
+                    } else {
+                        echo "ERROR: Could not execute $checkSql. " . mysqli_error($link);
+                    }
+                    exit();
+                }
+
                 $queries = array();
                 parse_str($_SERVER['QUERY_STRING'], $queries);
                 $selectedgym ='';
@@ -174,11 +209,19 @@
                                         echo "<td bgcolor='" . ($row['GymID']%2 ? 'FFFFFF':'F1F1F1'). "'>" . $row['Total'] . "</td>";	
                                         echo "<td bgcolor='" . ($row['GymID']%2 ? 'FFFFFF':'F1F1F1'). "'>" . $row['Created'] . "</td>";	
                                                                             
-                                        //echo "<td>";
-                                        //    echo "<a href='viewProjects.php?Ssn=". $row['Ssn']."&Lname=".$row['Lname']."' title='View Projects' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
-                                        //    echo "<a href='updateEmployee.php?Ssn=". $row['Ssn'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
-                                        //    echo "<a href='deleteEmployee.php?Ssn=". $row['Ssn'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
-                                        //	echo "<a href='viewDependents.php?Ssn=". $row['Ssn']."&Lname=".$row['Lname']."' title='View Dependents' data-toggle='tooltip'><span class='glyphicon glyphicon-user'></span></a>";
+                                        echo "<td>";
+                                            $hsc = htmlspecialchars(basename($_SERVER['REQUEST_URI']));
+                                            $query_string = http_build_query(array(
+                                                'deleteDate' => $row['Created'],
+                                                'deleteGym' => $row['GymID'],
+                                                'deleteRoutes' => 'Delete Routes On Date'
+                                            ));
+                                            $deleteurl = $hsc . '?' . $query_string;
+                                            echo '<form action="' . $deleteurl . '"method="post">';
+                                            echo '<input type="hidden" name="deleteDate" value="'.$row['Created'].'">';
+                                            echo '<input type="hidden" name="deleteGym" value="'.$row['GymID'].'">';
+                                            echo '<input type="submit" name="deleteRoutes" value="Delete Routes On Date">';
+                                            echo "</form>";
                                         echo "</td>";
                                     echo "</tr>";
                                 }
@@ -201,39 +244,6 @@
                     echo '<input type="hidden" name="deleteGym" value="' . $selectedgym . '">';
                     echo '<input type="submit" name="deleteRoutes" value="Delete Routes">';
                     echo '</form>';
-                    
-                    if (isset($_POST['deleteRoutes'])) {
-                        $deleteDate = $_POST['deleteDate'];
-                        $deleteGym = $_POST['deleteGym'];
-                    
-                        // Debugging: Print out the values being passed
-                        echo "<p>Deleting routes on date: $deleteDate for Gym ID: $deleteGym</p>";
-                    
-                        // Check for matching records before deletion
-                        $checkSql = "SELECT RouteID FROM Route WHERE Created = '$deleteDate' AND GymID = $deleteGym;";
-                        if ($checkResult = mysqli_query($link, $checkSql)) {
-                            if (mysqli_num_rows($checkResult) > 0) {
-                                echo "<p>Routes found for deletion:</p>";
-                                while ($row = mysqli_fetch_array($checkResult)) {
-                                    echo "<p>Route ID: " . $row['RouteID'] . "</p>";
-                                }
-                    
-                                // Call the stored procedure to delete routes
-                                $sql = "CALL DeleteRoutesByDate('$deleteDate', $deleteGym);";
-                    
-                                if (mysqli_query($link, $sql)) {
-                                    echo "<p>Routes created on $deleteDate at Gym $deleteGym have been deleted.</p>";
-                                } else {
-                                    echo "ERROR: Could not execute $sql. " . mysqli_error($link);
-                                }
-                            } else {
-                                echo "<p>No routes found for the specified date and gym.</p>";
-                            }
-                            mysqli_free_result($checkResult);
-                        } else {
-                            echo "ERROR: Could not execute $checkSql. " . mysqli_error($link);
-                        }
-                    }
                     
                     // Close connection
                     mysqli_close($link);
@@ -280,7 +290,7 @@
                                         echo "<td bgcolor='" . ($row['GymID']%2 ? 'FFFFFF':'F1F1F1'). "'>" . $row['Total'] . "</td>";	
                                         echo "<td bgcolor='" . ($row['GymID']%2 ? 'FFFFFF':'F1F1F1'). "'>" . $row['Created'] . "</td>";	
                                                                             
-                                        //echo "<td>";
+                                        echo "<td>";
                                         //    echo "<a href='viewProjects.php?Ssn=". $row['Ssn']."&Lname=".$row['Lname']."' title='View Projects' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
                                         //    echo "<a href='updateEmployee.php?Ssn=". $row['Ssn'] ."' title='Update Record' data-toggle='tooltip'><span class='glyphicon glyphicon-pencil'></span></a>";
                                         //    echo "<a href='deleteEmployee.php?Ssn=". $row['Ssn'] ."' title='Delete Record' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
