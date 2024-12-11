@@ -119,40 +119,77 @@ if (isset($_GET['error'])) {
                     echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
                 }
                 echo "<h2>Statistics</h2>";
+
+                // General Statistics
                 $sql2 = "SELECT Gym.GymID, COUNT(Route.RouteId) AS Route_Count, AVG(Route.Difficulty) AS Average_Difficulty
-                            FROM Gym
-                            NATURAL JOIN Route
-                            GROUP BY Gym.GymID;";
-                if($result = mysqli_query($link, $sql2)){
-                    if(mysqli_num_rows($result) > 0){
+                         FROM Gym
+                         NATURAL JOIN Route
+                         GROUP BY Gym.GymID;";
+                if ($result = mysqli_query($link, $sql2)) {
+                    if (mysqli_num_rows($result) > 0) {
                         echo "<table class='striped'>";
-                            echo "<thead>";
-                                echo "<tr>";
-                                    echo "<th width=20%>Gym ID</th>";
-                                    echo "<th width=40%>Route Count</th>";
-                                    echo "<th width=40%>Average Difficulty</th>";
-                                echo "</tr>";
-                            echo "</thead>";
-                            echo "<tbody>";
-                            while($row = mysqli_fetch_array($result)){
-                                echo "<tr>";
-                                    echo "<td><b>" . $row['GymID'] . "</b></td>";
-                                    echo "<td>" . $row['Route_Count'] . "</td>";
-                                    echo "<td>" . $row['Average_Difficulty'] . "</td>";
-                                echo "</tr>";
-                            }
-                            echo "</tbody>";
+                        echo "<thead>";
+                        echo "<tr>";
+                        echo "<th width=20%>Gym ID</th>";
+                        echo "<th width=40%>Route Count</th>";
+                        echo "<th width=40%>Average Difficulty</th>";
+                        echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo "<tr>";
+                            echo "<td><b>" . $row['GymID'] . "</b></td>";
+                            echo "<td>" . $row['Route_Count'] . "</td>";
+                            echo "<td>" . $row['Average_Difficulty'] . "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</tbody>";
                         echo "</table>";
                         // Free result set
                         mysqli_free_result($result);
-                    } else{
+                    } else {
                         echo "<p class='lead'><em>No Routes were Found.</em></p>";
                     }
-                } else{
-                    echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
+                } else {
+                    echo "ERROR: Could not execute $sql2. <br>" . mysqli_error($link);
                 }
+                
+                // Additional Statistics: Number of Routes by Difficulty Across All Gyms
+                $sql3 = "SELECT Difficulty, COUNT(*) AS RouteCount
+                         FROM Route
+                         GROUP BY Difficulty
+                         ORDER BY Difficulty ASC;";
+                if ($result2 = mysqli_query($link, $sql3)) {
+                    if (mysqli_num_rows($result2) > 0) {
+                        echo "<h3>Number of Routes by Difficulty Across All Gyms</h3>";
+                        echo "<table class='table table-bordered table-striped'>";
+                        echo "<thead>";
+                        echo "<tr>";
+                        echo "<th width=50%>Difficulty</th>";
+                        echo "<th width=50%>Route Count</th>";
+                        echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        while ($row2 = mysqli_fetch_array($result2)) {
+                            echo "<tr>";
+                            echo "<td>" . $row2['Difficulty'] . "</td>";
+                            echo "<td>" . $row2['RouteCount'] . "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</tbody>";
+                        echo "</table>";
+                        // Free result set
+                        mysqli_free_result($result2);
+                    } else {
+                        echo "<p class='lead'><em>No data found for route counts by difficulty.</em></p>";
+                    }
+                } else {
+                    echo "ERROR: Could not execute $sql3. <br>" . mysqli_error($link);
+                }
+                
                 // Close connection
                 mysqli_close($link);
+                
                 ?>
     </article>
 </body>
