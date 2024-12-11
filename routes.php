@@ -71,9 +71,7 @@
                 if ($selectedgym == "" && $selectedsetter ==""){
                     # No selections
                     echo "<h2>Routes</h2>";
-                    echo '<form action="createEmployee.php">';
-                    echo    '<input type="submit" value="+ Add Route" />';
-                    echo '</form>';
+                    
                     $sql = "SELECT Route.RouteID,Setter.Name,Created,Difficulty,Color, OffColor, GymID, COALESCE(SUM(RouteHold.Amount),0) AS Total
                             FROM Route
                             NATURAL JOIN RouteHold
