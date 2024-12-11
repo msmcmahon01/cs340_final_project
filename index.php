@@ -8,7 +8,7 @@ if (isset($_GET['error'])) {
 ?>
 <?php
 	session_start();
-	//$currentpage="View Employees"; 
+	//$currentpage="View Employees";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +36,7 @@ if (isset($_GET['error'])) {
     </style>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         });
 		 $('.selectpicker').selectpicker();
     </script>
@@ -66,7 +66,7 @@ if (isset($_GET['error'])) {
                 <?php
                 // Include config file
                 require_once "config.php";
-                
+
                 // Attempt select all employee query execution
                 // *****
                 // Insert your function for Salary Level
@@ -95,8 +95,8 @@ if (isset($_GET['error'])) {
                                     echo "<td><b>" . $row['GymID'] . "</b></td>";
                                     echo "<td>" . $row['Street'] . "</td>";
                                     echo "<td>" . $row['State'] . "</td>";
-                                    echo "<td>" . $row['City'] . "</td>";									
-                                    echo "<td>" . $row['Zip'] . "</td>";									
+                                    echo "<td>" . $row['City'] . "</td>";
+                                    echo "<td>" . $row['Zip'] . "</td>";
                                     echo "<td>";
                                     echo '<a href="routes.php?GymID='.$row["GymID"].'"><button>Routes</button></a><br>';
                                     echo '<a href="setters.php?GymID='.$row["GymID"].'"><button class="contrast">Setters</button></a>';
@@ -105,10 +105,10 @@ if (isset($_GET['error'])) {
                                     echo '<a href="deleteGym.php?GymID='.$row["GymID"].'" onclick="return confirm(\'Are you sure you want to delete this gym and its routes?\');">';
                                     echo '<button>Delete</button>';
                                     echo '</a>';
-                                    echo '</td>';       
+                                    echo '</td>';
                                 echo "</tr>";
                             }
-                            echo "</tbody>";                            
+                            echo "</tbody>";
                         echo "</table>";
                         // Free result set
                         mysqli_free_result($result);
@@ -141,7 +141,7 @@ if (isset($_GET['error'])) {
                                     echo "<td>" . $row['Average_Difficulty'] . "</td>";
                                 echo "</tr>";
                             }
-                            echo "</tbody>";                            
+                            echo "</tbody>";
                         echo "</table>";
                         // Free result set
                         mysqli_free_result($result);
