@@ -109,7 +109,7 @@
                             // Free result set
                             mysqli_free_result($result);
                         } else{
-                            echo "<p class='lead'><em>No Routes were Found.</em></p>";
+                            echo "<p class='lead'><em>No Setters were Found.</em></p>";
                         }
                     } else{
                         echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
@@ -168,7 +168,7 @@
                             // Free result set
                             mysqli_free_result($result);
                         } else{
-                            echo "<p class='lead'><em>No Routes were Found.</em></p>";
+                            echo "<p class='lead'><em>No Setters were Found.</em></p>";
                         }
                     } else{
                         echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
