@@ -80,10 +80,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Add Gym</title>
     <link rel="stylesheet" href="pico.slate.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
+	<style type="text/css">
         .wrapper{
-            width: 500px;
-            margin: 0 auto;
+            width: 70%;
+            margin:0 auto;
+        }
+        table tr td:last-child a{
+            margin-right: 15px;
         }
     </style>
 </head>
