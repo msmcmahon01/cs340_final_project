@@ -1,10 +1,10 @@
 <?php
-	session_start();	
+	session_start();
 // Include config file
 	require_once "config.php";
- 
+
 // Define variables and initialize with empty values
-// Note: You can not update SSN 
+// Note: You can not update SSN
 $Lname = $Fname = $Salary = $Bdate = $Address = $Sex = $Dno = $Super_ssn = "";
 $Lname_err = $Fname_err = $Address_err = $Sex_err = $Salary_err = $Dno_err = "" ;
 // Form default values
@@ -14,10 +14,10 @@ if(isset($_GET["Ssn"]) && !empty(trim($_GET["Ssn"]))){
 
     // Prepare a select statement
     $sql1 = "SELECT * FROM EMPLOYEE WHERE Ssn = ?";
-  
+
     if($stmt1 = mysqli_prepare($link, $sql1)){
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt1, "s", $param_Ssn);      
+        mysqli_stmt_bind_param($stmt1, "s", $param_Ssn);
         // Set parameters
        $param_Ssn = trim($_GET["Ssn"]);
 
@@ -40,7 +40,7 @@ if(isset($_GET["Ssn"]) && !empty(trim($_GET["Ssn"]))){
 		}
 	}
 }
- 
+
 // Post information about the employee when the form is submitted
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -54,48 +54,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Fname_err = "Please enter a first name.";
     } elseif(!filter_var($Fname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $Fname_err = "Please enter a valid first name.";
-    } 
+    }
     $Lname = trim($_POST["Lname"]);
     if(empty($Lname)){
         $Lname_err = "Please enter a last name.";
     } elseif(!filter_var($Lname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $Lname_err = "Please enter a valid last name.";
-    }  
+    }
     // Validate Address
     $Address = trim($_POST["Address"]);
     if(empty($Address)){
-        $Address_err = "Please enter Address.";     
+        $Address_err = "Please enter Address.";
     }
-	
+
 	// Validate Salary
     $Salary = trim($_POST["Salary"]);
     if(empty($Salary)){
-        $Salary_err = "Please enter salary.";    	
+        $Salary_err = "Please enter salary.";
 	}
-	
+
 	// Validate Department Number
     $Dno = trim($_POST["Dno"]);
     if(empty($Dno)){
-        $Dno_err = "Please enter department number.";    	
+        $Dno_err = "Please enter department number.";
 	}
 
     // Check input errors before inserting into database
     if(empty($Fname_err) && empty($Lname_err) && empty($Address_err) && empty($Salary_err) && empty($Dno_err)){
         // Prepare an update statement
         $sql = "UPDATE EMPLOYEE SET Fname=?, Lname=?, Address=?, Salary = ?, Dno = ? WHERE Ssn=?";
-    
+
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "sssdis", $param_Fname, $param_Lname,$param_Address, $param_Salary,$param_Dno, $param_Ssn);
-            
+
             // Set parameters
             $param_Fname = $Fname;
-			$param_Lname = $Lname;            
+			$param_Lname = $Lname;
 			$param_Address = $Address;
             $param_Salary = $Salary;
             $param_Dno = $Dno;
             $param_Ssn = $Ssn;
-            
+
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Records updated successfully. Redirect to landing page
@@ -104,11 +104,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "<center><h2>Error when updating</center></h2>";
             }
-        }        
+        }
         // Close statement
         mysqli_stmt_close($stmt);
     }
-    
+
     // Close connection
     mysqli_close($link);
 } else {
@@ -121,10 +121,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 		// Prepare a select statement
 		$sql1 = "SELECT * FROM EMPLOYEE WHERE Ssn = ?";
-  
+
 		if($stmt1 = mysqli_prepare($link, $sql1)){
 			// Bind variables to the prepared statement as parameters
-			mysqli_stmt_bind_param($stmt1, "s", $param_Ssn);      
+			mysqli_stmt_bind_param($stmt1, "s", $param_Ssn);
 			// Set parameters
 			$param_Ssn = trim($_GET["Ssn"]);
 
@@ -147,24 +147,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 					// URL doesn't contain valid id. Redirect to error page
 					header("location: error.php");
 					exit();
-				}                
+				}
 			} else{
 				echo "Error in SSN while updating";
-			}		
+			}
 		}
 			// Close statement
 			mysqli_stmt_close($stmt1);
-        
+
 			// Close connection
 			mysqli_close($link);
 	}  else{
         // URL doesn't contain id parameter. Redirect to error page
         header("location: error.php");
         exit();
-	}	
+    }
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,13 +212,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <label>Department Number</label>
                             <input type="number" min="1" max="20" name="Dno" class="form-control" value="<?php echo $Dno; ?>">
                             <span class="help-block"><?php echo $Dno_err;?></span>
-                        </div>						
+                        </div>
                         <input type="hidden" name="Ssn" value="<?php echo $Ssn; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-default">Cancel</a>
                     </form>
                 </div>
-            </div>        
+            </div>
         </div>
     </div>
 </body>
