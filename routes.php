@@ -193,6 +193,50 @@
                         echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
                     }
                     mysqli_close($link);
+
+                    echo "<h2>Delete Routes</h2>";
+                    echo '<form action="" method="post">';
+                    echo '<label for="deleteDate">Select Date:</label>';
+                    echo '<input type="date" id="deleteDate" name="deleteDate" required>';
+                    echo '<input type="hidden" name="deleteGym" value="' . $selectedgym . '">';
+                    echo '<input type="submit" name="deleteRoutes" value="Delete Routes">';
+                    echo '</form>';
+                    
+                    if (isset($_POST['deleteRoutes'])) {
+                        $deleteDate = $_POST['deleteDate'];
+                        $deleteGym = $_POST['deleteGym'];
+                    
+                        // Debugging: Print out the values being passed
+                        echo "<p>Deleting routes on date: $deleteDate for Gym ID: $deleteGym</p>";
+                    
+                        // Check for matching records before deletion
+                        $checkSql = "SELECT RouteID FROM Route WHERE Created = '$deleteDate' AND GymID = $deleteGym;";
+                        if ($checkResult = mysqli_query($link, $checkSql)) {
+                            if (mysqli_num_rows($checkResult) > 0) {
+                                echo "<p>Routes found for deletion:</p>";
+                                while ($row = mysqli_fetch_array($checkResult)) {
+                                    echo "<p>Route ID: " . $row['RouteID'] . "</p>";
+                                }
+                    
+                                // Call the stored procedure to delete routes
+                                $sql = "CALL DeleteRoutesByDate('$deleteDate', $deleteGym);";
+                    
+                                if (mysqli_query($link, $sql)) {
+                                    echo "<p>Routes created on $deleteDate at Gym $deleteGym have been deleted.</p>";
+                                } else {
+                                    echo "ERROR: Could not execute $sql. " . mysqli_error($link);
+                                }
+                            } else {
+                                echo "<p>No routes found for the specified date and gym.</p>";
+                            }
+                            mysqli_free_result($checkResult);
+                        } else {
+                            echo "ERROR: Could not execute $checkSql. " . mysqli_error($link);
+                        }
+                    }
+                    
+                    // Close connection
+                    mysqli_close($link);
                 } elseif ($selectedgym=='' && $selectedsetter!='') {
                     # Only Setter
                     echo "<h2>Routes from Setter ". $selectedsetter ."</h2>";
@@ -316,50 +360,6 @@
                     } else{
                         echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);
                     }
-                    mysqli_close($link);
-
-                    echo "<h2>Delete Routes</h2>";
-                    echo '<form action="" method="post">';
-                    echo '<label for="deleteDate">Select Date:</label>';
-                    echo '<input type="date" id="deleteDate" name="deleteDate" required>';
-                    echo '<input type="hidden" name="deleteGym" value="' . $selectedgym . '">';
-                    echo '<input type="submit" name="deleteRoutes" value="Delete Routes">';
-                    echo '</form>';
-                    
-                    if (isset($_POST['deleteRoutes'])) {
-                        $deleteDate = $_POST['deleteDate'];
-                        $deleteGym = $_POST['deleteGym'];
-                    
-                        // Debugging: Print out the values being passed
-                        echo "<p>Deleting routes on date: $deleteDate for Gym ID: $deleteGym</p>";
-                    
-                        // Check for matching records before deletion
-                        $checkSql = "SELECT RouteID FROM Route WHERE Created = '$deleteDate' AND GymID = $deleteGym;";
-                        if ($checkResult = mysqli_query($link, $checkSql)) {
-                            if (mysqli_num_rows($checkResult) > 0) {
-                                echo "<p>Routes found for deletion:</p>";
-                                while ($row = mysqli_fetch_array($checkResult)) {
-                                    echo "<p>Route ID: " . $row['RouteID'] . "</p>";
-                                }
-                    
-                                // Call the stored procedure to delete routes
-                                $sql = "CALL DeleteRoutesByDate('$deleteDate', $deleteGym);";
-                    
-                                if (mysqli_query($link, $sql)) {
-                                    echo "<p>Routes created on $deleteDate at Gym $deleteGym have been deleted.</p>";
-                                } else {
-                                    echo "ERROR: Could not execute $sql. " . mysqli_error($link);
-                                }
-                            } else {
-                                echo "<p>No routes found for the specified date and gym.</p>";
-                            }
-                            mysqli_free_result($checkResult);
-                        } else {
-                            echo "ERROR: Could not execute $checkSql. " . mysqli_error($link);
-                        }
-                    }
-                    
-                    // Close connection
                     mysqli_close($link);
                 }
                 ?>
